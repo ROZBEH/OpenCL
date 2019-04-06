@@ -200,10 +200,12 @@ Mat Apply_filter (int DilateorErode)
 int main()
 {	
 	// Dilating the image
+	
 	int dilate = 0;
 	Mat result_dilate = Apply_filter (dilate);
 	imwrite("dilate.png", result_dilate);
 	// Eroding the image
+
 	int erode = 1;
 	Mat result_erode = Apply_filter (erode);
 	imwrite("erode.png", result_erode);
