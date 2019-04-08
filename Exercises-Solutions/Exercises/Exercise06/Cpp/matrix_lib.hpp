@@ -11,7 +11,7 @@
 
 #ifndef __MATRIX_LIB_HDR
 #define __MATRIX_LIB_HDR
-
+#include "matmul.hpp"
 
 //------------------------------------------------------------------------------
 //

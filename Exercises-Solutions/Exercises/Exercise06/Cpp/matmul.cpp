@@ -24,8 +24,9 @@
 #include "matmul.hpp"
 #include "matrix_lib.hpp"
 #include "util.hpp"
-#include <err_code.h>
+#include "err_code.h"
 #include "device_picker.hpp"
+
 
 std::string kernelsource = "__kernel void mmul(                                                    \n" \
 "   const int N,                                                        \n" \
@@ -33,6 +34,17 @@ std::string kernelsource = "__kernel void mmul(                                 
 "   __global float* B,                                                  \n" \
 "   __global float* C)                                                  \n" \
 "{                                                                      \n" \
+"   int k;                                                              \n" \
+"   int i = get_global_id(0);                                           \n" \
+"   int j = get_global_id(1);                                           \n" \
+"   float tmp;                                                          \n" \
+"   if ( (i < N) && (j <N))                                             \n" \
+"   {                                                                   \n" \
+"       tmp = 0.0;                                                      \n" \
+"       for(k=0;k<N;k++)                                                \n" \
+"           tmp += A[i*N+k] * B[k*N+j];                                 \n" \
+"       C[i*N+j] = tmp;                                                 \n" \
+"   }                                                                   \n" \
 "}                                                                      \n" \
 "\n";
 
@@ -106,7 +118,7 @@ int main(int argc, char *argv[])
 
             seq_mat_mul_sdot(N, h_A, h_B, h_C);
 
-            run_time  = (static_cast<double>(timer.getTimeMilliseconds()) / 1000.0) - start_time;
+            run_time  = static_cast<double>(timer.getTimeMilliseconds()) / 1000.0 - start_time;
             results(N, h_C, run_time);
         }
 
@@ -126,8 +138,6 @@ int main(int argc, char *argv[])
 //--------------------------------------------------------------------------------
 // OpenCL matrix multiplication ... Naive
 //--------------------------------------------------------------------------------
-
-        timer.reset();
 
         // Create the compute program from the source buffer
         cl::Program program(context, kernelsource, true);
@@ -154,7 +164,7 @@ int main(int argc, char *argv[])
 
             queue.finish();
 
-            run_time  = (static_cast<double>(timer.getTimeMilliseconds()) / 1000.0) - start_time;
+            run_time  = static_cast<double>(timer.getTimeMilliseconds()) / 1000.0 - start_time;
 
             cl::copy(queue, d_c, h_C.begin(), h_C.end());
 
