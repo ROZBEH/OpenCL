@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 
         // Create the compute program from the source buffer
         // cl::Program program(context, kernelsource, true);
-        cl::Program program(context, util::loadProgram("kernel.cl"), true);
+        cl::Program program(context, util::loadProgram("ker_nel.cl"), true);
 
         // Create the compute kernel from the program
         cl::make_kernel<int, cl::Buffer, cl::Buffer, cl::Buffer> naive_mmul(program, "mmul");
