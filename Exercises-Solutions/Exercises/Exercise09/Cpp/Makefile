@@ -1,26 +1,29 @@
 
 ifndef CPPC
-	CPPC = g++
+	CPPC=g++
 endif
-
-CCFLAGS = -O3 -lrt
-
-LIBS = -lm
 
 CPP_COMMON = ../../Cpp_common
 
+CCFLAGS=
+
 INC = -I $(CPP_COMMON)
+
+LIBS = -lOpenCL -lrt
+
 
 # Check our platform and make sure we define the APPLE variable
 # and set up the right compiler flags and libraries
 PLATFORM = $(shell uname -s)
 ifeq ($(PLATFORM), Darwin)
 	CPPC = clang++
-	CCFLAGS = -O3 -std=c++11 -stdlib=libc++
+	CCFLAGS += -stdlib=libc++
+	LIBS = -framework OpenCL
 endif
 
-pi: pi.cpp
+pi_ocl: pi_ocl.cpp
 	$(CPPC) $^ $(INC) $(CCFLAGS) $(LIBS) -o $@
 
+
 clean:
-	rm -f pi
+	rm -f pi_ocl

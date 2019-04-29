@@ -89,7 +89,6 @@ int main(int argc, char *argv[])
 
         if ( nwork_groups < 1) {
             nwork_groups = device.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
-            std::cout<< nwork_groups << " = " << std::endl;
             work_group_size=in_nsteps / (nwork_groups*niters);
         }
 
